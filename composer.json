@@ -1,0 +1,22 @@
+{
+    "name": "kak/summernote",
+    "description": "summernote for Yii2",
+    "type": "yii2-extension",
+	"homepage": "https://github.com/sanchezzzhak/kak-summernote",
+    "keywords": ["yii2","summernote","summernote for yii2"],
+    "license": "",
+    "authors": [
+        {
+            "name": "Tutik Alexsandr",
+            "email": "sanchezzzhak@ya.ru"
+        }
+    ],
+	"require": {
+		"php":">=5.4.0",
+	},
+	"autoload": {
+		"psr-4": {
+			"kak\\widgets\\summernote\\": ""
+		}
+	}
+}
