@@ -1,10 +1,10 @@
 {
     "name": "kak/summernote",
-    "description": "summernote for Yii2",
+    "description": "Yii2 summernote widget",
     "type": "yii2-extension",
 	"homepage": "https://github.com/sanchezzzhak/kak-summernote",
-    "keywords": ["yii2","summernote","summernote for yii2"],
-    "license": "",
+    "keywords": ["yii2","summernote","summernote for yii2" , "widget", "wysiwyg"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Tutik Alexsandr",
@@ -12,11 +12,21 @@
         }
     ],
 	"require": {
-		"php":">=5.4.0"
+		"php":">=5.4.0",
+        "yiisoft/yii2": "~2",
+        "bower-asset/font-awesome": "4.*@stable",
+        "bower-asset/codemirror": "5.*@stable",
+        "bower-asset/summernote": "0.*@stable"
 	},
 	"autoload": {
 		"psr-4": {
 			"kak\\widgets\\summernote\\": ""
 		}
-	}
+	},
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
 }
