@@ -1,6 +1,8 @@
 <?php
 namespace kak\widgets\summernote;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Json;
 use yii\widgets\InputWidget;
 
 class Summernote extends InputWidget
@@ -31,7 +33,37 @@ class Summernote extends InputWidget
         parent::init();
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function run()
+    {
+        $this->registerAssets();
+        echo $this->hasModel()
+            ? Html::activeTextarea($this->model, $this->attribute, $this->options)
+            : Html::textarea($this->name, $this->value, $this->options);
+        $clientOptions = empty($this->clientOptions)
+            ? null
+            : Json::encode($this->clientOptions);
 
+        $this->getView()->registerJs('jQuery( "#' . $this->options['id'] . '" ).summernote(' . $clientOptions . ');');
+
+    }
+    private function registerAssets()
+    {
+        $view = $this->getView();
+        if (ArrayHelper::getValue($this->clientOptions, 'codemirror')) {
+            CodemirrorAsset::register($view);
+        }
+        SummernoteAsset::register($view);
+        if ($language = ArrayHelper::getValue($this->clientOptions, 'lang', null)) {
+            SummernoteLanguageAsset::register($view)->language = $language;
+        }
+
+        if (!empty($this->plugins) && is_array($this->plugins)) {
+            SummernotePluginAsset::register($view)->plugins = $this->plugins;
+        }
+    }
 
 
 
