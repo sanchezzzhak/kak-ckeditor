@@ -24,7 +24,6 @@ class SummernoteAsset extends AssetBundle
 
         $this->css[] = 'summernote.css';
         $this->js[] = 'summernote' . $postfix . '.js';
-
         parent::init();
     }
 }

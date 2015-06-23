@@ -4,16 +4,14 @@ namespace kak\widgets\summernote;
 
 use yii\web\AssetBundle;
 
-class SummernotePluginAsset extends AssetBundle
+class SummernotePackagePluginAsset extends AssetBundle
 {
     /** @var array */
     public $plugins = [];
     /** @var string */
-    public $sourcePath = '@bower/summernote/plugin';
+    public $sourcePath = '@kak/widgets/summernote/assets';
     /** @var array */
-    public $depends = [
-        'kak\widgets\summernote\SummernoteAsset'
-    ];
+    public $depends = [];
 
     /**
      * @inheritdoc
@@ -26,5 +24,3 @@ class SummernotePluginAsset extends AssetBundle
         parent::registerAssetFiles($view);
     }
 }
-
-$this->js[] = 'assets/plugin.browser.js';

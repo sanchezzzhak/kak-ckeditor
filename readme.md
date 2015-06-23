@@ -38,3 +38,29 @@ or
 	]) ?>
 ```
 See [clientOptions](http://summernote.org/#/example)
+
+
+##Configuration Browser plugin
+add section array to file config\params.php
+
+```php
+//...
+      'summernode' => [
+            'browser' => [
+                'url' => ['site/browser'], 
+                'dirs' => [ 
+                    'web dir ' => '@webroot'   // allow dirs
+                ],
+            ]
+        ]
+//...      
+```
+
+create method the SiteController 
+```php
+public function actionBrowser($dir)
+{
+    
+
+}
+```
