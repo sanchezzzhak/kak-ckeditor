@@ -1,5 +1,5 @@
 {
-    "name": "kak/summernote",
+    "name": "kak/widgets/summernote",
     "description": "Yii2 summernote widget",
     "type": "yii2-extension",
 	"homepage": "https://github.com/sanchezzzhak/kak-summernote",
@@ -17,15 +17,15 @@
         "bower-asset/codemirror": "5.*@stable",
         "bower-asset/summernote": "0.*@stable"
 	},
-	"autoload": {
-		"psr-4": {
-			"kak\\widgets\\summernote\\": ""
-		}
-	},
     "extra": {
         "asset-installer-paths": {
             "npm-asset-library": "vendor/npm",
             "bower-asset-library": "vendor/bower"
         }
-    }
+    },
+	"autoload": {
+		"psr-4": {
+			"kak\\widgets\\summernote\\": ""
+		}
+	}
 }
