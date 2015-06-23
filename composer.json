@@ -13,6 +13,7 @@
     ],
 	"require": {
 		"php":">=5.4.0",
+        "kak/storage": "dev-master",
         "bower-asset/font-awesome": "4.*@stable",
         "bower-asset/codemirror": "5.*@stable",
         "bower-asset/summernote": "0.*@stable"

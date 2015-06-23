@@ -12,7 +12,7 @@ class SummernotePluginAsset extends AssetBundle
     public $sourcePath = '@bower/summernote/plugin';
     /** @var array */
     public $depends = [
-        'Zelenin\yii\widgets\Summernote\SummernoteAsset'
+        'kak\widgets\summernote\SummernoteAsset'
     ];
 
     /**

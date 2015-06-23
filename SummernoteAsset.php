@@ -12,7 +12,7 @@ class SummernoteAsset extends AssetBundle
     /** @var array */
     public $depends = [
         'yii\bootstrap\BootstrapPluginAsset',
-        'Zelenin\yii\widgets\Summernote\FontawesomeAsset',
+        'kak\widgets\summernote\FontawesomeAsset',
     ];
 
     /**
