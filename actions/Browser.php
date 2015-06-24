@@ -31,16 +31,33 @@ class Browser extends Action
     {
 
         $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
-        $dirs =  $browserParams['dirs'];
+        $dirs = $firstDir = $browserParams['dirs'];
 
-        $storage = Yii::$app->request->get('storage', array_shift($dirs) );
+        // change storage
+        $storage = Yii::$app->request->get('storage', false );
+        if(!in_array($storage,$dirs))
+        {
+
+        }
+
+        if(empty($storage)) {
+            $storage =  array_shift($firstDir);
+        }
+
         $action  = Yii::$app->request->get('action', null );
-
         $baseDir = Yii::getAlias('@webroot');
         $dir =  Yii::getAlias($storage);
 
-        $thumbsDir = Yii::getAlias(rtrim($storage,'/')) . '/'. $this->thumbDirName;
+        $path = Yii::$app->request->get('path','');
 
+        // generate $breadcrumb and dir path
+        $breadcrumb = [];
+        if(!empty($path)){
+            $breadcrumb  = explode('/',trim(str_replace($dir,'',$baseDir . $path),'/'));
+            $dir.=  '/' .  trim(str_replace($dir,'',$baseDir . $path),'/');
+        }
+
+        $thumbsDir = Yii::getAlias(rtrim($storage,'/')) . '/'. $this->thumbDirName;
         if(!file_exists($thumbsDir)) {
             FileHelper::createDirectory($thumbsDir);
         }
@@ -64,23 +81,24 @@ class Browser extends Action
             if ($file === '.' || $file === '..'  || $file === $this->thumbDirName ) {
                 continue;
             }
-
             $path = $dir . DIRECTORY_SEPARATOR . $file;
             $normalizePath = FileHelper::normalizePath( str_replace($baseDir,'',$path)   ,'/');
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+
             $list[] = [
                 'name' => $file,
-                'dir'  => is_dir($path),
-                'ext'  => pathinfo($path, PATHINFO_EXTENSION),
+                'type'  => is_dir($path) ? 'dir' : 'file',
+                'ext'  =>  $ext,
+                'icon'  => $this->getFileIcon($ext),
                 'thumb' => isset($thumbFiles[$file]) ?  pathinfo($normalizePath,PATHINFO_DIRNAME) . '/' . $this->thumbDirName . '/' . $file: false,
                 'path' => $normalizePath
             ];
         }
         closedir($handle);
 
-
         $urlBrowser = $browserParams['url'];
 
-        return $this->render('list', compact('list','dirs','urlBrowser', 'storage'));
+        return $this->render('list', compact('list','dirs','urlBrowser', 'storage','breadcrumb'));
     }
 
     protected function render($view,$params = [])
@@ -200,5 +218,59 @@ class Browser extends Action
             ->save($pathPreviewFile, ['quality' => 100]);
 
     }
+        //
+
+
+    private function getFileIcon($ext){
+
+        $icons = [
+            'fa fa-folder' => [''],
+            //archive
+            'fa fa-archive'   =>['7z','ace','adf','air','apk','arj','bz2','bzip','cab','d64','dmg','git','hdf','ipf','iso','fdi','gz','jar','lha','lzh','lz','lzma','pak','phar','pkg','pimp','rar','safariextz','sfx','sit','sitx','sqx','sublime-package','swm','tar','tgz','wim','wsz','xar','zip'],
+            //apple
+            'fa fa-apple' =>['app','ipa','ipsw','saver'],
+           //fa fa-music
+            'fa fa-music' =>['aac','ac3','aif','aiff','au','caf','flac','it','m4a','m4p','med','mid','mo3','mod','mp1','mp2','mp3','mpc','ned','ra','ram','oga','ogg','oma','opus','s3m','sid','umx','wav','webma','wv','xm'],
+            //calendar
+            'fa fa-calendar'  =>['icbu','ics'],
+            //config
+            'fa fa-cogs'    =>['cfg','conf','ini','htaccess','htpasswd','plist','sublime-settings','xpy'],
+            //contact
+            'fa fa-group'   =>['abbu','contact','oab','pab','vcard','vcf'],
+            //database
+            'fa fa-database'  =>['bde','crp','db','db2','db3','dbb','dbf','dbk','dbs','dbx','edb','fdb','frm','fw','fw2','fw3','gdb','itdb','mdb','ndb','nsf','rdb','sas7mdb','sql','sqlite','tdb','wdb'],
+            //doc
+            'fa fa-file-text'       =>['abw','doc','docm','docs','docx','dot','key','numbers','odb','odf','odg','odp','odt','ods','otg','otp','ots','ott','pages','pdf','pot','ppt','pptx','sdb','sdc','sdd','sdw','sxi','wp','wp4','wp5','wp6','wp7','wpd','xls','xlsx','xps'],
+            //ebook
+            'fa fa-book'     =>['aeh','azw','ceb','chm','epub','fb2','ibooks','kf8','lit','lrf','lrx','mobi','pdb','pdg','prc','xeb'],
+            //email
+            'fa fa-envelope'     =>['eml','emlx','mbox','msg','pst'],
+            //feed
+            'fa fa-rss'      =>['atom','rss'],
+            //flash
+            'fa fa-bolt'     =>['fla','flv','swf'],
+            //linux
+            'fa fa-linux'     =>['bin','deb','rpm'],
+            //raw
+            'fa fa-camera'       =>['3fr','ari','arw','bay','cap','cr2','crw','dcs','dcr','dnf','dng','eip','erf','fff','iiq','k25','kdc','mdc','mef','mof','mrw','nef','nrw','obm','orf','pef','ptx','pxn','r3d','raf','raw','rwl','rw2','rwz','sr2','srf','srw','x3f'],
+            //script
+            'fa fa-code'=>['ahk','as','asp','aspx','bat','c','cfm','clj','cmd','cpp','css','el','erb','g','hml','java','js','json','jsp','less','nsh','nsi','php','php3','pl','py','rb','rhtml','sass','scala','scm','scpt','scptd','scss','sh','shtml','wsh','xml','yml'],
+            //text
+            'fa fa-file-text-o'  =>['ans','asc','ascii','csv','diz','latex','log','markdown','md','nfo','rst','rtf','tex','text','txt'],
+            //video
+            'fa fa-film'     =>['3g2','3gp','3gp2','3gpp','asf','avi','bik','bup','divx','ifo','m4v','mkv','mkv','mov','mp4','mpeg','mpg','rm','rv','ogv','qt','smk','vob','webm','wmv','xvid'],
+            //website
+            'fa fa-globe'   =>['htm','html','mhtml','mht','xht','xhtml'],
+            //windows
+            'fa fa-windows'   =>['dll','exe','msi','pif','ps1','scr','sys'],
+        ];
+        foreach($icons as $iconKey => $iconSection) {
+            if(in_array($ext,$iconSection)){
+                return  $iconKey;
+            }
+        }
+        return 'fa fa-file-o';
+    }
+
 
 }

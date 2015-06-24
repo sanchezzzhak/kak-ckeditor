@@ -15,45 +15,82 @@
     // core functions: range, dom
     var range = $.summernote.core.range;
     var dom = $.summernote.core.dom;
+    var $url;
+    var $browserDialog;
 
 
-    var onEventItemClick = function(event) {
-        
+
+    var ctrlMode = false;
+
+    var listingDir = function(storage,path) {
+
+        var $browserBody  = $browserDialog.find('.modal-body')
+
+        $.get($url,{ storage : storage, path: path  }).done(function(data){
+            $browserBody.html(data);
+            $browserDialog.find('.node-browser-storage').off().on('change', onEventStorageChange);
+            $browserDialog.find('.browsers li').off().on('click', onEventItemClick);
+        });
+    }
+
+
+
+
+    var onEventBreadcrumbClick = function(event) {
+
+
+
+    },onEventStorageChange = function(event){
+
+        listingDir( $(this).val(),null);
+
+    }, onEventItemClick = function(event) {
+
         var $browserDialog = $(this).closest('.note-browser-dialog');
-        $(this).addClass('selected').siblings().removeClass();
+
+        if($(this).data('type') == 'dir') {
+            listingDir( $browserDialog.find('.node-browser-storage').val(), $(this).data('path')  );
+            return false;
+        }
+
+        if(event.ctrlKey == false) {
+            $(this).addClass('selected').siblings().removeClass();
+        }
+        if(event.ctrlKey == true) {
+            $(this).toggleClass('selected');
+        }
+
         $browserDialog.find('.note-browserDone-btn').removeClass('disabled');
 
     }, showBrowserDialog = function ($editable, $dialog, text , layoutInfo) {
         return $.Deferred(function (deferred) {
 
-            var $browserDialog = $dialog.find('.note-browser-dialog'),
-            $browserDoneBtn    = $browserDialog.find('.note-browserDone-btn'),
-            $browserBody       = $browserDialog.find('.modal-body'),
+            $browserDialog = $dialog.find('.note-browser-dialog');
+
+            var $browserDoneBtn    = $browserDialog.find('.note-browserDone-btn');
+
             $url = layoutInfo.holder().data('browser-url');
 
             $dialog.find('.modal-dialog').addClass('modal-lg');
 
             $browserDialog.one('shown.bs.modal', function () {
 
-                $.get($url,{}).done(function(data){
-
-                    $browserBody.html(data);
-                    $browserDialog.find('.browsers li').off().on('click', onEventItemClick);
-                });
+                listingDir();
 
                 $browserDoneBtn.on('click',function (event) {
                     event.preventDefault();
-                    var file = 'value complete';
+
+                    var file = $browserDialog.find('.browsers li.selected').data('path');
+
                     deferred.resolve(file);
                     $browserDialog.modal('hide');
                 });
 
 
             }).one('hidden.bs.modal', function () {
-                //$videoUrl.off('input');
+
 
                 $browserDialog.find('.browsers li').off('click');
-
                 $browserDoneBtn.off('click');
 
                 if (deferred.state() === 'pending') {
@@ -62,9 +99,15 @@
             }).modal('show');
         });
 
-    }, createObjectNode = function(){
-        var $object = $('<div></div>div>');
-        return $object[0];
+    }, createObjectNode = function(url){
+
+        if (url && (/\.(gif|jpg|jpeg|tiff|png)$/i).test(url)) {
+            var $img = $('<img />').attr('src', url);
+            return $img[0];
+        }
+        var $a = $('<a></a>',{ href: url});
+            $a.text(url);
+        return $a[0];
     };
 
     /**
@@ -101,7 +144,7 @@
             browser: function (lang) {
                 var body = '';
                 var footer = '<a href="#" class="btn btn-primary note-browserDone-btn disabled">' + 'select' + '</a>';
-                return tmpl.dialog('note-browser-dialog', 'lang insert video' , body, footer);
+                return tmpl.dialog('note-browser-dialog', 'Browser Manager' , body, footer);
             }
         },
 
@@ -133,7 +176,7 @@
                     // when ok button clicked
                     // restore range
                     editor.restoreRange($editable);
-                    // insert video node
+
                     editor.insertNode($editable, createObjectNode(url));
                 }).fail(function () {
                     // when cancel button clicked
