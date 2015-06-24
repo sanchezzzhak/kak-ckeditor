@@ -1,34 +1,52 @@
 <?php
 namespace kak\widgets\summernote\actions;
 use Yii;
-use yii\base\Action;
+
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\web\View;
+use yii\base\Action;
 
 class Browser extends Action
 {
-    public $dir = [];
+    /** @var $view View */
+    protected $view;
+    /** @var $viewPath string */
+    protected $viewPath = '@kak/widgets/summernote/views/';
+
+    public function init()
+    {
+        $this->view = new View;
+        parent::init();
+    }
 
     public function run()
     {
 
 
 
-        $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
 
+
+        $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
         $dirs =  $browserParams['dirs'];
 
+        $storage = Yii::$app->request->get('storage', array_shift($dirs) );
+        $action  = Yii::$app->request->get('action', null );
 
         $baseDir = Yii::getAlias('@webroot');
-        $dir =  Yii::getAlias('@webroot');
+        $dir =  Yii::getAlias($storage);
+
+        if(!empty($action) && $this->hasMethod('action' . $action)) {
+            $this->{'action'.$action}();
+        }
 
         $handle = opendir($dir);
         $list = [];
         if ($handle === false) {
             throw new InvalidParamException("Unable to open directory: $dir");
         }
+
         while (($file = readdir($handle)) !== false) {
             if ($file === '.' || $file === '..') {
                 continue;
@@ -43,9 +61,28 @@ class Browser extends Action
         }
         closedir($handle);
 
-        $view = new View();
-        return $view->render('@kak/widgets/summernote/views/list', compact('list','dirs'));
+
+        $urlBrowser = $browserParams['url'];
+
+        return $this->render('list', compact('list','dirs','urlBrowser'));
     }
+
+    protected function render($view,$params = [])
+    {
+        return $this->view->render($this->viewPath . $view, $params);
+    }
+
+    protected function actionUpload()
+    {
+
+    }
+
+    protected function actionThumb()
+    {
+
+        Yii::$app->end();
+    }
+
 
 
 }

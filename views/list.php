@@ -1,4 +1,9 @@
+<?php
+    use \yii\helpers\ArrayHelper;
+    use \yii\helpers\Url;
 
+
+?>
 <style>
 
     nav.browsers .name{
@@ -43,13 +48,14 @@
         user-select: none;
     }
     nav.browsers li {
-        width: 33.33%;
+        width: 32%;
+        min-width: 120px;
         position: relative;
         float: left;
-        height: 75px;
+        height: 95px;
         line-height: 20px;
         padding: 0 5px;
-        margin: 0;
+        margin: 0 3px 3px 0;
         border: 1px solid rgba(236, 236, 236, 0.8);
     }
 
@@ -66,6 +72,11 @@
            <li>
                <span class="name"><?=$item['name']?></span>
                <span class="ext label label-info"><?=$item['ext']?></span>
+               <span class="thumb">
+                   <?php if(in_array($item['ext'],['jpg','jpeg','png'])):?>
+                       <img src="<?=Url::to(ArrayHelper::merge($urlBrowser,['action' => 'thumb', $path = $item['path']]))?>">
+                   <?php endif;?>
+               </span>
                <a></a>
            </li>
        <?php endforeach;?>

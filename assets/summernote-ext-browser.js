@@ -22,8 +22,8 @@
         return $.Deferred(function (deferred) {
 
             var $browserDialog = $dialog.find('.note-browser-dialog'),
-            $browserDoneBtn    = $dialog.find('.note-browserDone-btn'),
-            $browserBody       = $dialog.find('.modal-body'),
+            $browserDoneBtn    = $browserDialog.find('.note-browserDone-btn'),
+            $browserBody       = $browserDialog.find('.modal-body'),
             $url = layoutInfo.holder().data('browser-url');
 
             $dialog.find('.modal-dialog').addClass('modal-lg');
