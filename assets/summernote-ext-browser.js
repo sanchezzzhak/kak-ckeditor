@@ -17,8 +17,13 @@
     var dom = $.summernote.core.dom;
 
 
+    var onEventItemClick = function(event) {
+        
+        var $browserDialog = $(this).closest('.note-browser-dialog');
+        $(this).addClass('selected').siblings().removeClass();
+        $browserDialog.find('.note-browserDone-btn').removeClass('disabled');
 
-    var showBrowserDialog = function ($editable, $dialog, text , layoutInfo) {
+    }, showBrowserDialog = function ($editable, $dialog, text , layoutInfo) {
         return $.Deferred(function (deferred) {
 
             var $browserDialog = $dialog.find('.note-browser-dialog'),
@@ -31,7 +36,9 @@
             $browserDialog.one('shown.bs.modal', function () {
 
                 $.get($url,{}).done(function(data){
+
                     $browserBody.html(data);
+                    $browserDialog.find('.browsers li').off().on('click', onEventItemClick);
                 });
 
                 $browserDoneBtn.on('click',function (event) {
@@ -44,6 +51,9 @@
 
             }).one('hidden.bs.modal', function () {
                 //$videoUrl.off('input');
+
+                $browserDialog.find('.browsers li').off('click');
+
                 $browserDoneBtn.off('click');
 
                 if (deferred.state() === 'pending') {
@@ -90,8 +100,7 @@
 
             browser: function (lang) {
                 var body = '';
-
-                var footer = '<a href="#" class="btn btn-primary note-browserDone-btn">' + 'select' + '</a>';
+                var footer = '<a href="#" class="btn btn-primary note-browserDone-btn disabled">' + 'select' + '</a>';
                 return tmpl.dialog('note-browser-dialog', 'lang insert video' , body, footer);
             }
         },
