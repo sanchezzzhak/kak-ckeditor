@@ -12,6 +12,16 @@
         display: inline-block;
         width: 100%;
     }
+    nav.browsers .thumb {
+        display: block;
+        width: 60px;
+        height: 60px;
+    }
+    nav.browsers .thumb img {
+        width: 100%;
+        height: 100%;
+    }
+
     nav.browsers li a {
         position: absolute;
         top: 0;
@@ -73,8 +83,12 @@
                <span class="name"><?=$item['name']?></span>
                <span class="ext label label-info"><?=$item['ext']?></span>
                <span class="thumb">
-                   <?php if(in_array($item['ext'],['jpg','jpeg','png'])):?>
-                       <img src="<?=Url::to(ArrayHelper::merge($urlBrowser,['action' => 'thumb', $path = $item['path']]))?>">
+                   <?php if(in_array($item['ext'],['jpg','jpeg','png']) ):
+                       $urlThumb  = !$item['thumb']
+                           ? Url::to(ArrayHelper::merge($urlBrowser,['action' => 'thumb', 'path' => $item['path'], 'storage' => $storage , 'r' => microtime() ]))
+                           : $item['thumb'];
+                       ?>
+                       <img src="<?=$urlThumb?>">
                    <?php endif;?>
                </span>
                <a></a>
