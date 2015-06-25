@@ -40,9 +40,8 @@ or
 See [clientOptions](http://summernote.org/#/example)
 
 
-##Configuration Browser plugin
+##Configuration Browser plugin (File browser for summernote)
 add section array to file config\params.php
-
 ```php
 //...
       'summernode' => [
@@ -56,11 +55,23 @@ add section array to file config\params.php
 //...      
 ```
 
-create method the SiteController 
+Create method the SiteController 
 ```php
-public function actionBrowser($dir)
+public function actionBrowser()
 {
-    
+      $action = new \kak\widgets\summernote\actions\Browser($this->id, $this,[]);
+      return $action->run();
 
 }
+```
+Or
+```php
+    public function actions()
+    {
+        return [
+            'browser' => [
+                'class' => '\kak\widgets\summernote\actions\Browser',
+            ],
+        ];
+    }
 ```

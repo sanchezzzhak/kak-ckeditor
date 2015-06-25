@@ -1,0 +1,68 @@
+nav.node-browser-listing .name{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+nav.node-browser-listing .thumb {
+    display: block;
+    z-index: 11;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    font-size: 60px;
+    text-align: center;
+    color: #fe920b;
+}
+nav.node-browser-listing .thumb img {
+    width: 100%;
+    height: 100%;
+}
+
+nav.node-browser-listing li a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+}
+nav.node-browser-listing li.selected {
+    border: 1px solid #666;
+    background: #ddd;
+}
+nav.node-browser-listing li a:hover {
+    background: #ddd;
+    opacity: 0.3;
+}
+nav.node-browser-listing .ext{
+    position: absolute;
+    right: 2px;;
+    bottom: 2px;
+    z-index: 11;
+}
+nav.node-browser-listing {
+    margin: 10px 0;
+    position:relative;
+    overflow: auto;
+    height: 500px;
+}
+
+nav.node-browser-listing ul {
+    list-style: none;
+    position:relative;
+    width:auto;
+    padding: 0;
+    user-select: none;
+}
+nav.node-browser-listing li {
+    width: 32%;
+    min-width: 120px;
+    position: relative;
+    float: left;
+    height: 95px;
+    line-height: 20px;
+    padding: 0 5px;
+    margin: 0 3px 3px 0;
+    border: 1px solid rgba(236, 236, 236, 0.8);
+}

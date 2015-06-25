@@ -5,6 +5,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
 use yii\web\View;
 use yii\base\Action;
 
@@ -20,6 +21,8 @@ class Browser extends Action
     protected $view;
     /** @var $viewPath string */
     protected $viewPath = '@kak/widgets/summernote/views/';
+    /** @var  $root string */
+    protected $root;
 
     public function init()
     {
@@ -29,73 +32,35 @@ class Browser extends Action
 
     public function run()
     {
-
         $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
-        $dirs = $firstDir = $browserParams['dirs'];
+        $firstDir  = $dirs = $browserParams['dirs'];
 
         // change storage
         $storage = Yii::$app->request->get('storage', false );
-        if(!in_array($storage,$dirs))
-        {
-
-        }
-
         if(empty($storage)) {
             $storage =  array_shift($firstDir);
         }
+        if(!$this->checkStorage($storage) ){
+           echo 'Storage not found';
+            exit;
+        }
+
+
+            $this->root = Yii::getAlias($storage);
+        $path = Yii::$app->request->get('path','');
+        $dir =   FileHelper::normalizePath($this->absPath($path));
 
         $action  = Yii::$app->request->get('action', null );
-        $baseDir = Yii::getAlias('@webroot');
-        $dir =  Yii::getAlias($storage);
-
-        $path = Yii::$app->request->get('path','');
-
-        // generate $breadcrumb and dir path
-        $breadcrumb = [];
-        if(!empty($path)){
-            $breadcrumb  = explode('/',trim(str_replace($dir,'',$baseDir . $path),'/'));
-            $dir.=  '/' .  trim(str_replace($dir,'',$baseDir . $path),'/');
-        }
-
-        $thumbsDir = Yii::getAlias(rtrim($storage,'/')) . '/'. $this->thumbDirName;
-        if(!file_exists($thumbsDir)) {
-            FileHelper::createDirectory($thumbsDir);
-        }
-
-        $thumbFiles = ArrayHelper::index(FileHelper::findFiles($thumbsDir), function($element){
-            return pathinfo($element,PATHINFO_BASENAME);
-        });
-
         if(!empty($action) && $this->hasMethod('action' . $action)) {
             $this->{'action'.$action}();
         }
 
-        $handle = opendir($dir);
-        $list = [];
-        if ($handle === false) {
-            throw new InvalidParamException("Unable to open directory: $dir");
+        $list = $this->getFilesList($dir);
+
+        $breadcrumb = [];
+        if(!empty($path)){
+            $breadcrumb  = explode(DIRECTORY_SEPARATOR,$path);
         }
-
-        while (($file = readdir($handle)) !== false) {
-
-            if ($file === '.' || $file === '..'  || $file === $this->thumbDirName ) {
-                continue;
-            }
-            $path = $dir . DIRECTORY_SEPARATOR . $file;
-            $normalizePath = FileHelper::normalizePath( str_replace($baseDir,'',$path)   ,'/');
-            $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-            $list[] = [
-                'name' => $file,
-                'type'  => is_dir($path) ? 'dir' : 'file',
-                'ext'  =>  $ext,
-                'icon'  => $this->getFileIcon($ext),
-                'thumb' => isset($thumbFiles[$file]) ?  pathinfo($normalizePath,PATHINFO_DIRNAME) . '/' . $this->thumbDirName . '/' . $file: false,
-                'path' => $normalizePath
-            ];
-        }
-        closedir($handle);
-
         $urlBrowser = $browserParams['url'];
 
         return $this->render('list', compact('list','dirs','urlBrowser', 'storage','breadcrumb'));
@@ -126,7 +91,6 @@ class Browser extends Action
 
             $thumbPath  =  $basePath . rtrim($dir,'/') . '/'. $this->thumbDirName.'/' . $basename;
 
-
             $size   = getimagesize($fullPath);
             if($size!== false){
                 $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
@@ -137,12 +101,80 @@ class Browser extends Action
                 header("Content-Type: image/".$format );
                 echo $buffer;
             }
-
         }
 
         Yii::$app->end();
 
     }
+
+
+    /** FS Methods */
+
+    protected function joinPath($dir, $name)
+    {
+        return rtrim($dir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name;
+    }
+
+    protected function relPath($path)
+    {
+        return $path == $this->root ? '' : substr($path, strlen(rtrim($this->root, DIRECTORY_SEPARATOR)) + 1);
+    }
+
+    protected function absPath($path)
+    {
+        return $path == DIRECTORY_SEPARATOR ? $this->root : $this->joinPath($this->root, $path);
+    }
+
+    protected function inPath($path, $parent)
+    {
+        $real_path = realpath($path);
+        $real_parent = realpath($parent);
+        return $real_path && $real_parent ? ( $real_path === $real_parent || strpos($real_path, rtrim($real_parent, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR) === 0)  : false;
+    }
+
+    protected function getFilesList($dir)
+    {
+        $baseDir = FileHelper::normalizePath(Yii::getAlias('@webroot'));
+        $handle = opendir($dir);
+        $list = [];
+        if ($handle === false) {
+            throw new InvalidParamException("Unable to open directory: $dir");
+        }
+
+        $thumbsDir = $dir . DIRECTORY_SEPARATOR . $this->thumbDirName;
+        if(!file_exists($thumbsDir)) {
+            FileHelper::createDirectory($thumbsDir);
+        }
+        $thumbFiles = ArrayHelper::index(FileHelper::findFiles($thumbsDir), function($element){
+            return pathinfo($element,PATHINFO_BASENAME);
+        });
+
+        while (($file = readdir($handle)) !== false) {
+
+            if ($file === '.' || $file === '..'  || $file === $this->thumbDirName ) {
+                continue;
+            }
+            $path =  $dir . DIRECTORY_SEPARATOR . $file;
+            $normalizePath = str_replace('\\','/',str_replace($baseDir,'',$path));
+
+            $ext   = pathinfo($path, PATHINFO_EXTENSION);
+            $isDir = is_dir($path);
+
+            $list[] = [
+                'name' => $file,
+                'type' => $isDir ? 'dir' : 'file',
+                'ext'  =>  $ext,
+                'icon'  => $this->getFileIcon($ext),
+                'thumb' => isset($thumbFiles[$file]) ?  pathinfo($normalizePath,PATHINFO_DIRNAME) . '/' . $this->thumbDirName . '/' . $file: false,
+                'path'  => $isDir ? $this->relPath($path) : $normalizePath
+            ];
+        }
+        closedir($handle);
+        return $list;
+
+    }
+    /** ====  ==== **/
+
 
     /**
      * @param $storage
