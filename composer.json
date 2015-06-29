@@ -14,7 +14,7 @@
 	"require": {
 		"php":">=5.4.0",
         "yiisoft/yii2-imagine": "*",
-        "ckeditor/ckeditor": "stable"
+        "ckeditor/ckeditor": "4.4.7"
 	},
     "extra": {
         "asset-installer-paths": {
