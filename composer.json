@@ -1,9 +1,9 @@
 {
-    "name": "kak/summernote",
+    "name": "kak/ckeditor",
     "description": "Yii2 summernote widget",
     "type": "yii2-extension",
-	"homepage": "https://github.com/sanchezzzhak/kak-summernote",
-    "keywords": ["yii2","summernote","summernote for yii2" , "widget", "wysiwyg"],
+	"homepage": "https://github.com/sanchezzzhak/kak-ckeditor",
+    "keywords": ["yii2","ckeditor","ckeditor for yii2" , "widget", "wysiwyg"],
     "license": "MIT",
     "authors": [
         {
@@ -24,7 +24,7 @@
     },
 	"autoload": {
 		"psr-4": {
-			"kak\\widgets\\summernote\\": ""
+			"kak\\widgets\\ckeditor\\": ""
 		}
 	}
 }

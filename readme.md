@@ -1,8 +1,6 @@
-# Yii2 Summernote widget
+# Yii2 ckeditor widget
 
-This project is a fork https://github.com/zelenin/yii2-summernote-widget
-
-[Yii2](http://www.yiiframework.com) [Summernote](http://summernote.org) widget. Super simple WYSIWYG editor on Bootstrap
+[Yii2](http://www.yiiframework.com) [ckeditor](http://ckeditor.com) widget.
 
 ## Installation
 
@@ -12,11 +10,11 @@ The preferred way to install this extension is through [Composer](http://getcomp
 
 Either run
 
-	php composer.phar require zelenin/yii2-summernote-widget "dev-master"
+	php composer.phar require kak/ckeditor "dev-master"
 
 or add
 
-	"kak/summernote": "dev-master"
+	"kak/ckeditor": "dev-master"
 
 to the require section of your composer.json
 
@@ -25,7 +23,7 @@ to the require section of your composer.json
 
 ## Usage
 ```php    
-	<?= $form->field($model, 'content')->widget(kak\widgets\summernote\Summernote::className(), [
+	<?= $form->field($model, 'content')->widget(kak\widgets\ckeditor\CKEditor::className(), [
 		'clientOptions' => [
 			...
 		]
@@ -33,21 +31,21 @@ to the require section of your composer.json
 ```
 or
 ```php
-	<?= kak\widgets\summernote\Summernote::widget([
+	<?= kak\widgets\ckeditor\CKEditor::widget([
 		'name' => 'editor_id',
 		'clientOptions' => [
 			...
 		]
 	]) ?>
 ```
-See [clientOptions](http://summernote.org/#/example)
+See [clientOptions](http://ckeditor.com/#/example)
 
 
-##Configuration Browser plugin (File browser for summernote)
+##Configuration Browser plugin (File browser for ckeditor)
 add section array to file config\params.php
 ```php
 //...
-      'summernode' => [
+      'ckeditor' => [
             'browser' => [
                 'url' => ['site/browser'], 
                 'dirs' => [ 
@@ -62,7 +60,7 @@ Create method the SiteController
 ```php
 public function actionBrowser()
 {
-      $action = new \kak\widgets\summernote\actions\Browser($this->id, $this,[]);
+      $action = new \kak\widgets\ckeditor\actions\Browser($this->id, $this,[]);
       return $action->run();
 
 }
@@ -73,7 +71,7 @@ Or
     {
         return [
             'browser' => [
-                'class' => '\kak\widgets\summernote\actions\Browser',
+                'class' => '\kak\widgets\ckeditor\actions\Browser',
             ],
         ];
     }
