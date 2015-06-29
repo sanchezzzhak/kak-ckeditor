@@ -14,9 +14,7 @@
 	"require": {
 		"php":">=5.4.0",
         "yiisoft/yii2-imagine": "*",
-        "bower-asset/font-awesome": "4.*@stable",
-        "bower-asset/codemirror": "5.*@stable",
-        "bower-asset/summernote": "0.*@stable"
+        "ckeditor/ckeditor": "stable"
 	},
     "extra": {
         "asset-installer-paths": {

@@ -20,6 +20,9 @@ or add
 
 to the require section of your composer.json
 
+
+
+
 ## Usage
 ```php    
 	<?= $form->field($model, 'content')->widget(kak\widgets\summernote\Summernote::className(), [
