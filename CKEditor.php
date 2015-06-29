@@ -1,5 +1,5 @@
 <?php
-namespace kak\widgets\summernote;
+namespace kak\widgets\ckeditor;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -7,7 +7,7 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\widgets\InputWidget;
 
-class Summernote extends InputWidget
+class CKEditor extends InputWidget
 {
     /** @var array */
     private $defaultOptions = ['class' => 'form-control'];
@@ -48,11 +48,11 @@ class Summernote extends InputWidget
         $this->options       = ArrayHelper::merge($this->defaultOptions, $this->options);
         $this->clientOptions = ArrayHelper::merge($this->defaultClientOptions, $this->clientOptions);
 
-        $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
+        $browserParams = ArrayHelper::getValue(Yii::$app->params,'ckeditor.browser',false);
 
         if($this->browser && $browserParams) {
-            $this->clientOptions['toolbar'][] = ['group', ['browser']];
-            $this->options['data-browser-url'] = Url::to($browserParams['url']);
+            // $this->clientOptions['toolbar'][] = ['group', ['browser']];
+            // $this->options['data-browser-url'] = Url::to($browserParams['url']);
         }
 
 
@@ -72,7 +72,7 @@ class Summernote extends InputWidget
             ? null
             : Json::encode($this->clientOptions);
 
-        $this->getView()->registerJs('jQuery( "#' . $this->options['id'] . '" ).summernote(' . $clientOptions . ');');
+       // $this->getView()->registerJs('jQuery( "#' . $this->options['id'] . '" ).summernote(' . $clientOptions . ');');
 
     }
     private function registerAssets()
@@ -82,7 +82,7 @@ class Summernote extends InputWidget
             $packagePlugins[] = 'browser';
         }
 
-        $view = $this->getView();
+    /*    $view = $this->getView();
         if (ArrayHelper::getValue($this->clientOptions, 'codemirror')) {
             CodemirrorAsset::register($view);
         }
@@ -97,7 +97,7 @@ class Summernote extends InputWidget
         if (!empty($packagePlugins)) {
             SummernotePackagePluginAsset::register($view)->plugins = $packagePlugins;
         }
-
+*/
     }
 
 

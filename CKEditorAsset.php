@@ -1,18 +1,18 @@
 <?php
 
-namespace kak\widgets\summernote;
+namespace kak\widgets\ckeditor;
 
 use Yii;
 use yii\web\AssetBundle;
 
-class SummernoteAsset extends AssetBundle
+class CKEditorAsset extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@bower/summernote/dist';
+    public $sourcePath = '@bower/ckeditor/dist';
     /** @var array */
     public $depends = [
         'yii\bootstrap\BootstrapPluginAsset',
-        'kak\widgets\summernote\FontawesomeAsset',
+        'kak\widgets\ckeditor\FontawesomeAsset'
     ];
 
     /**
@@ -22,8 +22,8 @@ class SummernoteAsset extends AssetBundle
     {
         $postfix = YII_DEBUG ? '' : '.min';
 
-        $this->css[] = 'summernote.css';
-        $this->js[] = 'summernote' . $postfix . '.js';
+        $this->css[] = 'ckeditor.css';
+        $this->js[]  = 'ckeditor' . $postfix . '.js';
         parent::init();
     }
 }

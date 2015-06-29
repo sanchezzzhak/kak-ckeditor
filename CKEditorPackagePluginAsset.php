@@ -1,19 +1,19 @@
 <?php
 
-namespace kak\widgets\summernote;
+namespace kak\widgets\ckeditor;
 
 use yii\web\AssetBundle;
 
-class SummernotePluginAsset extends AssetBundle
+class CKEditorPackagePluginAsset extends AssetBundle
 {
     /** @var array */
     public $plugins = [];
     /** @var string */
-    public $sourcePath = '@bower/summernote/plugin';
+    public $sourcePath = '@kak/widgets/ckeditor/assets';
     /** @var array */
-    public $depends = [
-        'kak\widgets\summernote\SummernoteAsset'
-    ];
+    public $depends = [];
+
+    public $cssFiles = ['browser'];
 
     /**
      * @inheritdoc
@@ -22,9 +22,11 @@ class SummernotePluginAsset extends AssetBundle
     {
         foreach ($this->plugins as $plugin) {
             $this->js[] = 'summernote-ext-' . $plugin . '.js';
+
+            if(in_array($plugin,$this->cssFiles)) {
+                $this->css[] = 'summernote-ext-' . $plugin . '.css';
+            }
         }
         parent::registerAssetFiles($view);
     }
 }
-
-$this->js[] = 'assets/plugin.browser.js';

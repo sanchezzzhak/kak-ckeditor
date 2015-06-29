@@ -1,5 +1,5 @@
 <?php
-namespace kak\widgets\summernote\actions;
+namespace kak\widgets\ckeditor\actions;
 use Yii;
 
 use yii\base\InvalidParamException;
