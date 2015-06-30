@@ -14,12 +14,14 @@ class BrowserAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\web\JqueryAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
         'kak\widgets\ckeditor\FontawesomeAsset',
     ];
 
     public $css = [
         'ckeditor-ext-browser.css'
     ];
-
+    public $js = [
+        'ckeditor-ext-browser.js'
+    ];
 }

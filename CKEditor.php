@@ -63,7 +63,6 @@ class CKEditor extends InputWidget
     public function run()
     {
         $this->registerAssets();
-
         echo $this->hasModel()
             ? Html::activeTextarea($this->model, $this->attribute, $this->options)
             : Html::textarea($this->name, $this->value, $this->options);

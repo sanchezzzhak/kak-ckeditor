@@ -1,3 +1,7 @@
+.node-browser {
+    margin-top: 20px;
+}
+
 nav.node-browser-listing .name{
     text-overflow: ellipsis;
     overflow: hidden;
@@ -45,6 +49,7 @@ nav.node-browser-listing {
     margin: 10px 0;
     position:relative;
     overflow: auto;
+    height: 500px;
 }
 
 nav.node-browser-listing ul {

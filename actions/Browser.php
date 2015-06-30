@@ -62,7 +62,6 @@ class Browser extends Action
             $breadcrumb  = explode(DIRECTORY_SEPARATOR,$path);
         }
         $urlBrowser = $browserParams['url'];
-
         return $this->render('list', compact('list','dirs','urlBrowser', 'storage','breadcrumb'));
     }
 
