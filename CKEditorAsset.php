@@ -8,7 +8,7 @@ use yii\web\AssetBundle;
 class CKEditorAsset extends AssetBundle
 {
     /** @var string */
-    public $sourcePath = '@bower/ckeditor/dist';
+    public $sourcePath = '@vendor/ckeditor/ckeditor';
     /** @var array */
     public $depends = [
         'yii\bootstrap\BootstrapPluginAsset',

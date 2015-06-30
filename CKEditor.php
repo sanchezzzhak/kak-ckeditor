@@ -13,24 +13,26 @@ class CKEditor extends InputWidget
     private $defaultOptions = ['class' => 'form-control'];
     /** @var array */
     private $defaultClientOptions = [
-        'height' => 200,
-        'codemirror' => [
-            'theme' => 'monokai',
-        ],
-        'toolbar' => [
-            ['style', ['style']],
-            ['font', ['bold', 'italic', 'underline', 'clear']],
-            ['fontname', ['fontname']],
-            ['fontsize', ['fontsize']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            ['table', ['table']],
-            ['insert', ['link', 'picture', 'hr']],
-            ['view', ['fullscreen', 'codeview']],
-            ['help', ['help']]
+        'height' => 400,
+        'toolbarGroups' => [
+            ['name' => 'document', 'groups' => ['mode', 'document', 'doctools']],
+            ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
+            ['name' => 'editing', 'groups' => [ 'find', 'selection', 'spellchecker']],
+            ['name' => 'forms'],
+            '/',
+            ['name' => 'basicstyles', 'groups' => ['basicstyles', 'colors','cleanup']],
+            ['name' => 'paragraph', 'groups' => [ 'list', 'indent', 'blocks', 'align', 'bidi' ]],
+            ['name' => 'links'],
+            ['name' => 'insert'],
+            '/',
+            ['name' => 'styles'],
+            ['name' => 'blocks'],
+            ['name' => 'colors'],
+            ['name' => 'tools'],
+            ['name' => 'others'],
         ],
     ];
+
     /** @var array */
     public $options = [];
     /** @var array */
@@ -49,13 +51,10 @@ class CKEditor extends InputWidget
         $this->clientOptions = ArrayHelper::merge($this->defaultClientOptions, $this->clientOptions);
 
         $browserParams = ArrayHelper::getValue(Yii::$app->params,'ckeditor.browser',false);
-
-        if($this->browser && $browserParams) {
-            // $this->clientOptions['toolbar'][] = ['group', ['browser']];
-            // $this->options['data-browser-url'] = Url::to($browserParams['url']);
+        if($browserParams){
+            $this->clientOptions['filebrowserBrowseUrl'] = Url::to($browserParams['url']);
+            $this->clientOptions['filebrowserUploadUrl'] = Url::to($browserParams['url']);
         }
-
-
         parent::init();
     }
 
@@ -65,14 +64,15 @@ class CKEditor extends InputWidget
     public function run()
     {
         $this->registerAssets();
+
         echo $this->hasModel()
             ? Html::activeTextarea($this->model, $this->attribute, $this->options)
             : Html::textarea($this->name, $this->value, $this->options);
-        $clientOptions = empty($this->clientOptions)
-            ? null
-            : Json::encode($this->clientOptions);
 
-       // $this->getView()->registerJs('jQuery( "#' . $this->options['id'] . '" ).summernote(' . $clientOptions . ');');
+        $clientOptions = empty($this->clientOptions) ? '{}'  : Json::encode($this->clientOptions);
+
+        $id = $this->options['id'];
+        $this->getView()->registerJs("CKEDITOR.replace('{$id}', {$clientOptions})");
 
     }
     private function registerAssets()
@@ -82,22 +82,12 @@ class CKEditor extends InputWidget
             $packagePlugins[] = 'browser';
         }
 
-    /*    $view = $this->getView();
-        if (ArrayHelper::getValue($this->clientOptions, 'codemirror')) {
-            CodemirrorAsset::register($view);
-        }
-        SummernoteAsset::register($view);
-        if ($language = ArrayHelper::getValue($this->clientOptions, 'lang', null)) {
-            SummernoteLanguageAsset::register($view)->language = $language;
-        }
+        $view = $this->getView();
+        CKEditorAsset::register($view);
 
         if (!empty($this->plugins) && is_array($this->plugins)) {
-            SummernotePluginAsset::register($view)->plugins = $this->plugins;
+            CKEditorPackagePluginAsset::register($view)->plugins = $packagePlugins;
         }
-        if (!empty($packagePlugins)) {
-            SummernotePackagePluginAsset::register($view)->plugins = $packagePlugins;
-        }
-*/
     }
 
 

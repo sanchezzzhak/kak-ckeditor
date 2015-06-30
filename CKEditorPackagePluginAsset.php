@@ -21,10 +21,10 @@ class CKEditorPackagePluginAsset extends AssetBundle
     public function registerAssetFiles($view)
     {
         foreach ($this->plugins as $plugin) {
-            $this->js[] = 'summernote-ext-' . $plugin . '.js';
+            $this->js[] = 'ckeditor-ext-' . $plugin . '.js';
 
             if(in_array($plugin,$this->cssFiles)) {
-                $this->css[] = 'summernote-ext-' . $plugin . '.css';
+                $this->css[] = 'ckeditor-ext-' . $plugin . '.css';
             }
         }
         parent::registerAssetFiles($view);

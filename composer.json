@@ -1,6 +1,6 @@
 {
     "name": "kak/ckeditor",
-    "description": "Yii2 summernote widget",
+    "description": "Yii2 ckeditor widget",
     "type": "yii2-extension",
 	"homepage": "https://github.com/sanchezzzhak/kak-ckeditor",
     "keywords": ["yii2","ckeditor","ckeditor for yii2" , "widget", "wysiwyg"],
