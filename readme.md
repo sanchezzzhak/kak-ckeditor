@@ -55,17 +55,8 @@ add section array to file config\params.php
         ]
 //...      
 ```
-
 Create method the SiteController 
-```php
-public function actionBrowser()
-{
-      $action = new \kak\widgets\ckeditor\actions\Browser($this->id, $this,[]);
-      return $action->run();
 
-}
-```
-Or
 ```php
     public function actions()
     {
@@ -76,3 +67,5 @@ Or
         ];
     }
 ```
+
+
