@@ -14,7 +14,8 @@
 	"require": {
 		"php":">=5.4.0",
         "yiisoft/yii2-imagine": "*",
-        "ckeditor/ckeditor": "4.4.7"
+        "ckeditor/ckeditor": "4.4.7",
+        "bower-asset/summernote": "0.*@stable"
 	},
     "extra": {
         "asset-installer-paths": {
