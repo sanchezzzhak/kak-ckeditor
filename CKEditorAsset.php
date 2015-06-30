@@ -11,8 +11,8 @@ class CKEditorAsset extends AssetBundle
     public $sourcePath = '@vendor/ckeditor/ckeditor';
     /** @var array */
     public $depends = [
-        'yii\bootstrap\BootstrapPluginAsset',
-        'kak\widgets\ckeditor\FontawesomeAsset'
+        'yii\web\YiiAsset',
+        'yii\web\JqueryAsset'
     ];
 
     /**
@@ -22,8 +22,9 @@ class CKEditorAsset extends AssetBundle
     {
         $postfix = YII_DEBUG ? '' : '.min';
 
-        $this->css[] = 'ckeditor.css';
-        $this->js[]  = 'ckeditor' . $postfix . '.js';
+        $this->js[]  = 'ckeditor.js';
+        $this->js[]  = 'adapters/jquery.js';
+
         parent::init();
     }
 }

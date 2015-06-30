@@ -13,7 +13,7 @@ class CKEditor extends InputWidget
     private $defaultOptions = ['class' => 'form-control'];
     /** @var array */
     private $defaultClientOptions = [
-        'height' => 400,
+        /*'height' => 400,
         'toolbarGroups' => [
             ['name' => 'document', 'groups' => ['mode', 'document', 'doctools']],
             ['name' => 'clipboard', 'groups' => ['clipboard', 'undo']],
@@ -30,7 +30,7 @@ class CKEditor extends InputWidget
             ['name' => 'colors'],
             ['name' => 'tools'],
             ['name' => 'others'],
-        ],
+        ],*/
     ];
 
     /** @var array */
@@ -50,10 +50,9 @@ class CKEditor extends InputWidget
         $this->options       = ArrayHelper::merge($this->defaultOptions, $this->options);
         $this->clientOptions = ArrayHelper::merge($this->defaultClientOptions, $this->clientOptions);
 
-        $browserParams = ArrayHelper::getValue(Yii::$app->params,'ckeditor.browser',false);
-        if($browserParams){
-            $this->clientOptions['filebrowserBrowseUrl'] = Url::to($browserParams['url']);
-            $this->clientOptions['filebrowserUploadUrl'] = Url::to($browserParams['url']);
+        if($browserUrl = ArrayHelper::getValue(Yii::$app->params,'ckeditor.browser.url',false)){
+            $this->clientOptions['filebrowserBrowseUrl'] = Url::to($browserUrl);
+            $this->clientOptions['filebrowserUploadUrl'] = Url::to($browserUrl);
         }
         parent::init();
     }
@@ -84,10 +83,10 @@ class CKEditor extends InputWidget
 
         $view = $this->getView();
         CKEditorAsset::register($view);
-
+/*
         if (!empty($this->plugins) && is_array($this->plugins)) {
             CKEditorPackagePluginAsset::register($view)->plugins = $packagePlugins;
-        }
+        }*/
     }
 
 

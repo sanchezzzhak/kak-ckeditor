@@ -20,7 +20,7 @@ class Browser extends Action
     /** @var $view View */
     protected $view;
     /** @var $viewPath string */
-    protected $viewPath = '@kak/widgets/summernote/views/';
+    protected $viewPath = '@kak/widgets/ckeditor/views/';
     /** @var  $root string */
     protected $root;
 
@@ -32,7 +32,7 @@ class Browser extends Action
 
     public function run()
     {
-        $browserParams = ArrayHelper::getValue(Yii::$app->params,'summernode.browser',false);
+        $browserParams = ArrayHelper::getValue(Yii::$app->params,'ckeditor.browser',false);
         $firstDir  = $dirs = $browserParams['dirs'];
 
         // change storage
@@ -40,10 +40,10 @@ class Browser extends Action
         if(empty($storage)) {
             $storage =  array_shift($firstDir);
         }
-        if(!$this->checkStorage($storage) ){
+        /*if(!$this->checkStorage($storage) ){
            echo 'Storage not found';
             exit;
-        }
+        }*/
 
 
             $this->root = Yii::getAlias($storage);

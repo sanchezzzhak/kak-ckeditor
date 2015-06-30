@@ -45,7 +45,6 @@ nav.node-browser-listing {
     margin: 10px 0;
     position:relative;
     overflow: auto;
-    height: 500px;
 }
 
 nav.node-browser-listing ul {

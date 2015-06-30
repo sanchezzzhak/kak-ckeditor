@@ -1,6 +1,6 @@
 <?php
 
-namespace kak\widgets\summernote;
+namespace kak\widgets\ckeditor;
 
 use yii\web\AssetBundle;
 
