@@ -15,7 +15,7 @@
 		"php":">=5.4.0",
         "yiisoft/yii2-imagine": "*",
         "ckeditor/ckeditor": "4.4.7",
-        "bower-asset/font-awesome": "4.7.0"
+        "bower-asset/font-awesome": "4.*"
 	},
     "extra": {
         "asset-installer-paths": {
