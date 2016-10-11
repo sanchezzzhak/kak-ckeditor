@@ -1,4 +1,4 @@
-{
+7{
     "name": "kak/ckeditor",
     "description": "Yii2 ckeditor widget",
     "type": "yii2-extension",
@@ -15,7 +15,7 @@
 		"php":">=5.4.0",
         "yiisoft/yii2-imagine": "*",
         "ckeditor/ckeditor": "4.4.7",
-        "bower-asset/font-awesome": "4.*@stable"
+        "bower-asset/font-awesome": "4.7.0"
 	},
     "extra": {
         "asset-installer-paths": {
